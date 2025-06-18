@@ -31,6 +31,11 @@ class LibroResource extends Resource
                 Forms\Components\TextInput::make('isbn')
                     ->required()
                     ->maxLength(255),
+                Select::make('autores')
+                    ->relationship('autores', 'nombres')
+                    ->multiple()
+                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->nombres . ' ' . $record->apellidos)
+                    ->searchable(),
                 Select::make('editorial_id')->required()
                     ->relationship('editorial', 'nombre')
                     ->searchable(),
