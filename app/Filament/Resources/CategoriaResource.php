@@ -3,15 +3,12 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\CategoriaResource\Pages;
-use App\Filament\Resources\CategoriaResource\RelationManagers;
 use App\Models\Categoria;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class CategoriaResource extends Resource
 {
@@ -19,17 +16,24 @@ class CategoriaResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
-    protected static ?string $pluralModelLabel = 'Categorías';
-    protected static ?string $modelLabel = 'Categoría';
+    public static function getPluralModelLabel(): string {
+        return __('Categorias');
+    }
+
+    public static function getModelLabel(): string {
+        return __('Categoria');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('nombre')
+                    ->label(__('nombre'))
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('descripcion')
+                Forms\Components\RichEditor::make('descripcion')
+                    ->label(__('descripcion'))
                     ->columnSpanFull(),
             ]);
     }
@@ -39,15 +43,14 @@ class CategoriaResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('nombre')
+                    ->label(__('nombre'))
                     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                Tables\Columns\TextColumn::make('descripcion')
+                    ->searchable()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label(__('descripcion'))
+                    ->html()
+
             ])
             ->filters([
                 //

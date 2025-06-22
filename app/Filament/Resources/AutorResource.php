@@ -3,10 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\AutorResource\Pages;
-use App\Filament\Resources\AutorResource\RelationManagers;
 use App\Models\Autor;
-use Faker\Provider\Text;
-use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -14,8 +11,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class AutorResource extends Resource
 {
@@ -23,16 +18,24 @@ class AutorResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
-    protected static ?string $pluralModelLabel = 'Autores';
-    protected static ?string $modelLabel = 'Autor';
+    public static function getPluralModelLabel(): string {
+        return __('Autores');
+    }
+
+    public static function getModelLabel(): string {
+        return __('Autor');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('nombres')->required(),
-                TextInput::make('apellidos')->required(),
+                TextInput::make('nombres')->required()
+                ->label(__('nombres')),
+                TextInput::make('apellidos')->required()
+                ->label(__('apellidos')),
                 DatePicker::make('fecha_nacimiento')->required()
+                ->label(__('fecha_nacimiento'))
             ]);
     }
 
@@ -40,9 +43,12 @@ class AutorResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nombres'),
-                TextColumn::make('apellidos'),
+                TextColumn::make('nombres')
+                ->label(__('nombres')),
+                TextColumn::make('apellidos')
+                ->label(__('apellidos')),
                 TextColumn::make('fecha_nacimiento')
+                ->label(__('fecha_nacimiento')),
             ])
             ->filters([
                 //

@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\PrestamoResource\Pages;
-use App\Filament\Resources\PrestamoResource\RelationManagers;
 use App\Filament\Resources\PrestamoResource\RelationManagers\DetallePrestamosRelationManager;
 use App\Models\Prestamo;
 use Filament\Forms;
@@ -13,8 +12,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class PrestamoResource extends Resource
 {
@@ -22,25 +19,42 @@ class PrestamoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
+    public static function getPluralModelLabel(): string {
+        return __('Prestamos');
+    }
+
+    public static function getModelLabel(): string {
+        return __('Prestamo');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Select::make('user_id')
+                    ->label(__('User'))
                     ->relationship('user','name')
                 ->searchable(),
                 Forms\Components\DatePicker::make('fecha_prestamo')
+                    ->label(__('fecha_prestamo'))
                     ->required(),
                 Forms\Components\DatePicker::make('fecha_devolucion_esperada')
+                    ->label(__('fecha_devolucion_esperada'))
                     ->required(),
                 Select::make('estado')
                     ->options([
-                        'Prestado',
-                        'Pendiente',
-                        'Devuelto',
+                        'prestado' => __('prestado'),
+                        'pendiente' => __('pendiente'),
+                        'devuelto' => __('devuelto'),
                     ])
-                    ->required(),
-                Forms\Components\DatePicker::make('fecha_devuelto'),
+                    ->label(__('estado'))
+
+                    ->required()
+
+                    ->native(false),
+
+                Forms\Components\DatePicker::make('fecha_devuelto')
+                    ->label(__('fecha_devuelto')),
             ]);
     }
 
@@ -48,26 +62,30 @@ class PrestamoResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('user.name'),
+                TextColumn::make('user.name')
+                ->label(__('User')),
                 Tables\Columns\TextColumn::make('fecha_prestamo')
+                    ->label(__('fecha_prestamo'))
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('fecha_devolucion_esperada')
+                    ->label(__('fecha_devolucion_esperada'))
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('estado')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'prestado' => 'warning',
+                        'pendiente' => 'danger',
+                        'devuelto' => 'success',
+                    })
+                    ->formatStateUsing(fn (string $state): string => __("$state"))
+                    ->label(__('estado'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('fecha_devuelto')
+                    ->label(__('fecha_devuelto'))
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

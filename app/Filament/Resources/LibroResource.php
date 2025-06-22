@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\LibroResource\Pages;
-use App\Filament\Resources\LibroResource\RelationManagers;
 use App\Models\Libro;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
@@ -12,8 +11,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class LibroResource extends Resource
 {
@@ -21,32 +18,47 @@ class LibroResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
+    public static function getPluralModelLabel(): string {
+        return __('Libros');
+    }
+
+    public static function getModelLabel(): string {
+        return __('Libro');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('titulo')
+                    ->label(__('titulo'))
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('isbn')
+                    ->label(__('isbn'))
                     ->required()
                     ->maxLength(255),
                 Select::make('autores')
+                    ->label(__('Autores'))
                     ->relationship('autores', 'nombres')
                     ->multiple()
                     ->getOptionLabelFromRecordUsing(fn ($record) => $record->nombres . ' ' . $record->apellidos)
                     ->searchable(),
                 Select::make('editorial_id')->required()
+                    ->label(__('Editorial'))
                     ->relationship('editorial', 'nombre')
                     ->searchable(),
                 Select::make('categorias')
+                    ->label(__('Categorias'))
                     ->multiple()
                     ->relationship('categorias','nombre')
                     ->required()
                     ->searchable(),
                 Forms\Components\DatePicker::make('anio_publicacion')
+                    ->label(__('anio_publicacion'))
                     ->required(),
                 Forms\Components\TextInput::make('cantidad_disponible')
+                    ->label(__('cantidad_disponible'))
                     ->required()
                     ->numeric(),
             ]);
@@ -57,25 +69,22 @@ class LibroResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('titulo')
+                    ->label(__('titulo'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('isbn')
+                    ->label(__('isbn'))
                     ->searchable(),
                 TextColumn::make('editorial.nombre')
+                    ->label(__('Editorial'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('anio_publicacion')
+                    ->label(__('anio_publicacion'))
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('cantidad_disponible')
+                    ->label(__('cantidad_disponible'))
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

@@ -3,9 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EditorialResource\Pages;
-use App\Filament\Resources\EditorialResource\RelationManagers;
 use App\Models\Editorial;
-use Filament\Forms;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -13,8 +11,6 @@ use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class EditorialResource extends Resource
 {
@@ -22,17 +18,26 @@ class EditorialResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-bookmark-square';
 
-    protected static ?string $pluralModelLabel = 'Editoriales';
-    protected static ?string $modelLabel = 'Editorial';
+    public static function getPluralModelLabel(): string {
+        return __('Editoriales');
+    }
+
+    public static function getModelLabel(): string {
+        return __('Editorial');
+    }
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('nombre')->required(),
-                RichEditor::make('direccion')->required()->columnSpanFull(),
-                TextInput::make('telefono')->tel(),
-                TextInput::make('sitio_web')->url(),
+                TextInput::make('nombre')->required()
+                ->label(__('nombre')),
+                RichEditor::make('direccion')->required()->columnSpanFull()
+                ->label(__('direccion')),
+                TextInput::make('telefono')->tel()
+                ->label(__('telefono')),
+                TextInput::make('sitio_web')->url()
+                ->label(__('sitio_web')),
             ]);
     }
 
@@ -40,10 +45,14 @@ class EditorialResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('nombre'),
-                TextColumn::make('direccion')->html(),
-                TextColumn::make('telefono'),
-                TextColumn::make('sitio_web'),
+                TextColumn::make('nombre')
+                ->label(__('nombre')),
+                TextColumn::make('direccion')->html()
+                ->label(__('direccion')),
+                TextColumn::make('telefono')
+                ->label(__('telefono')),
+                TextColumn::make('sitio_web')
+                ->label(__('sitio_web')),
             ])
             ->filters([
                 //
