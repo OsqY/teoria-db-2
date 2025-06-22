@@ -14,52 +14,6 @@ class DetallePrestamosRelationManager extends RelationManager
 {
     protected static string $relationship = 'detallePrestamos';
 
-    protected  function afterCreate():void {
-        $detalle = $this->record;
-
-        $libro = $detalle->libro;
-
-        if ($libro && $libro->canitdad_disponible > 0) {
-            $libro->canitdad_disponible -= 1;
-            $libro->save();
-        }
-    }
-
-    protected function afterEdit(): void
-    {
-        $original = $this->record->getOriginal();
-        $nuevoLibro = $this->record->libro;
-
-        if ($original['libro_id'] !== $this->record->libro_id) {
-            $libroAnterior = \App\Models\Libro::find($original['libro_id']);
-
-            if ($libroAnterior) {
-                $libroAnterior->cantidad_disponible += 1;
-                $libroAnterior->save();
-            }
-
-            if ($nuevoLibro) {
-                $nuevoLibro->cantidad_disponible -= 1;
-                $nuevoLibro->save();
-            }
-
-        }
-
-    }
-
-    protected function beforeDelete(): void
-    {
-        $libro = $this->record->libro;
-
-        if ($libro) {
-            $libro->cantidad_disponible += 1;
-            $libro->save();
-        }
-
-    }
-
-
-
     public static function getTitle(Model $ownerRecord, string $pageClass): string
     {
         return __('detallePrestamo');
@@ -96,11 +50,54 @@ class DetallePrestamosRelationManager extends RelationManager
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->after(function (Model $record) {
+                        $libro = $record->libro;
+
+                        if ($libro && $libro->cantidad_disponible > 0) {
+
+                            $libro->cantidad_disponible -= 1;
+
+                            $libro->save();
+
+                        }
+
+                    }),
+
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->after(function (Model $record) {
+                        $original = $record->getOriginal();
+                        $nuevoLibro = $record->libro;
+
+                        if ($original['libro_id'] !== $record->libro_id) {
+                            $libroAnterior = \App\Models\Libro::find($original['libro_id']);
+
+                            if ($libroAnterior) {
+                                $libroAnterior->cantidad_disponible += 1;
+                                $libroAnterior->save();
+                            }
+
+                            if ($nuevoLibro) {
+                                $nuevoLibro->cantidad_disponible -= 1;
+                                $nuevoLibro->save();
+                            }
+
+                        }
+
+                    }),
+                Tables\Actions\DeleteAction::make()
+                    ->before(function (Model $record) {
+                        $libro = $record->libro;
+
+                        if ($libro) {
+                            $libro->cantidad_disponible += 1;
+                            $libro->save();
+                        }
+
+                    }),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
