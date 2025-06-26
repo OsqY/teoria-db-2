@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Categoria extends Model
 {
-    public function libros():BelongsToMany {
+    public function libros(): BelongsToMany
+    {
         return $this->belongsToMany(Libro::class, 'categoria_libros');
     }
 }

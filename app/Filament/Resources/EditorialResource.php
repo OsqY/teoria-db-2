@@ -18,12 +18,19 @@ class EditorialResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-bookmark-square';
 
-    public static function getPluralModelLabel(): string {
+    public static function getPluralModelLabel(): string
+    {
         return __('Editoriales');
     }
 
-    public static function getModelLabel(): string {
+    public static function getModelLabel(): string
+    {
         return __('Editorial');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Libros');
     }
 
     public static function form(Form $form): Form
@@ -31,13 +38,13 @@ class EditorialResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nombre')->required()
-                ->label(__('nombre')),
+                    ->label(__('nombre')),
                 RichEditor::make('direccion')->required()->columnSpanFull()
-                ->label(__('direccion')),
+                    ->label(__('direccion')),
                 TextInput::make('telefono')->tel()
-                ->label(__('telefono')),
+                    ->label(__('telefono')),
                 TextInput::make('sitio_web')->url()
-                ->label(__('sitio_web')),
+                    ->label(__('sitio_web')),
             ]);
     }
 
@@ -46,13 +53,13 @@ class EditorialResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('nombre')
-                ->label(__('nombre')),
+                    ->label(__('nombre')),
                 TextColumn::make('direccion')->html()
-                ->label(__('direccion')),
+                    ->label(__('direccion')),
                 TextColumn::make('telefono')
-                ->label(__('telefono')),
+                    ->label(__('telefono')),
                 TextColumn::make('sitio_web')
-                ->label(__('sitio_web')),
+                    ->label(__('sitio_web')),
             ])
             ->filters([
                 //

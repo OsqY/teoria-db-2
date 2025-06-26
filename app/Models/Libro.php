@@ -8,16 +8,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Libro extends Model
 {
-    public function editorial():BelongsTo
+    public function editorial(): BelongsTo
     {
         return $this->belongsTo(Editorial::class);
     }
 
-    public function categorias():BelongsToMany {
-        return $this->belongsToMany(Categoria::class,'categoria_libro');
+    public function categorias(): BelongsToMany
+    {
+        return $this->belongsToMany(Categoria::class, 'categoria_libro');
     }
 
-    public function autores():BelongsToMany {
+    public function autores(): BelongsToMany
+    {
         return $this->belongsToMany(Autor::class);
     }
 }

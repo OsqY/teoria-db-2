@@ -9,6 +9,7 @@
     "Libro": "Book",
     "Prestamo": "Loan",
     "Prestamos": "Loans",
+    "Transacciones": "Transactions",
     "nombre": "Name",
     "descripcion": "Description",
     "telefono": "Phone",

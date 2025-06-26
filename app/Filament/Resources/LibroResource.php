@@ -18,12 +18,19 @@ class LibroResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-book-open';
 
-    public static function getPluralModelLabel(): string {
+    public static function getPluralModelLabel(): string
+    {
         return __('Libros');
     }
 
-    public static function getModelLabel(): string {
+    public static function getModelLabel(): string
+    {
         return __('Libro');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Libros');
     }
 
     public static function form(Form $form): Form
@@ -42,7 +49,7 @@ class LibroResource extends Resource
                     ->label(__('Autores'))
                     ->relationship('autores', 'nombres')
                     ->multiple()
-                    ->getOptionLabelFromRecordUsing(fn ($record) => $record->nombres . ' ' . $record->apellidos)
+                    ->getOptionLabelFromRecordUsing(fn($record) => $record->nombres . ' ' . $record->apellidos)
                     ->searchable(),
                 Select::make('editorial_id')->required()
                     ->label(__('Editorial'))
@@ -51,7 +58,7 @@ class LibroResource extends Resource
                 Select::make('categorias')
                     ->label(__('Categorias'))
                     ->multiple()
-                    ->relationship('categorias','nombre')
+                    ->relationship('categorias', 'nombre')
                     ->required()
                     ->searchable(),
                 Forms\Components\DatePicker::make('anio_publicacion')

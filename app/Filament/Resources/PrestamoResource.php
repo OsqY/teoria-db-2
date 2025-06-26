@@ -19,12 +19,19 @@ class PrestamoResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-users';
 
-    public static function getPluralModelLabel(): string {
+    public static function getPluralModelLabel(): string
+    {
         return __('Prestamos');
     }
 
-    public static function getModelLabel(): string {
+    public static function getModelLabel(): string
+    {
         return __('Prestamo');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Transacciones');
     }
 
     public static function form(Form $form): Form
@@ -33,8 +40,8 @@ class PrestamoResource extends Resource
             ->schema([
                 Select::make('user_id')
                     ->label(__('User'))
-                    ->relationship('user','name')
-                ->searchable(),
+                    ->relationship('user', 'name')
+                    ->searchable(),
                 Forms\Components\DatePicker::make('fecha_prestamo')
                     ->label(__('fecha_prestamo'))
                     ->required(),
@@ -63,7 +70,7 @@ class PrestamoResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('user.name')
-                ->label(__('User')),
+                    ->label(__('User')),
                 Tables\Columns\TextColumn::make('fecha_prestamo')
                     ->label(__('fecha_prestamo'))
                     ->date()
@@ -74,12 +81,12 @@ class PrestamoResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('estado')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
+                    ->color(fn(string $state): string => match ($state) {
                         'prestado' => 'warning',
                         'pendiente' => 'danger',
                         'devuelto' => 'success',
                     })
-                    ->formatStateUsing(fn (string $state): string => __("$state"))
+                    ->formatStateUsing(fn(string $state): string => __("$state"))
                     ->label(__('estado'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('fecha_devuelto')

@@ -16,12 +16,19 @@ class CategoriaResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-squares-2x2';
 
-    public static function getPluralModelLabel(): string {
+    public static function getPluralModelLabel(): string
+    {
         return __('Categorias');
     }
 
-    public static function getModelLabel(): string {
+    public static function getModelLabel(): string
+    {
         return __('Categoria');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Libros');
     }
 
     public static function form(Form $form): Form

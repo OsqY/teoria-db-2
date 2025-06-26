@@ -18,12 +18,19 @@ class AutorResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-user-circle';
 
-    public static function getPluralModelLabel(): string {
+    public static function getPluralModelLabel(): string
+    {
         return __('Autores');
     }
 
-    public static function getModelLabel(): string {
+    public static function getModelLabel(): string
+    {
         return __('Autor');
+    }
+
+    public static function getNavigationGroup(): ?string
+    {
+        return __('Libros');
     }
 
     public static function form(Form $form): Form
@@ -31,11 +38,11 @@ class AutorResource extends Resource
         return $form
             ->schema([
                 TextInput::make('nombres')->required()
-                ->label(__('nombres')),
+                    ->label(__('nombres')),
                 TextInput::make('apellidos')->required()
-                ->label(__('apellidos')),
+                    ->label(__('apellidos')),
                 DatePicker::make('fecha_nacimiento')->required()
-                ->label(__('fecha_nacimiento'))
+                    ->label(__('fecha_nacimiento'))
             ]);
     }
 
@@ -44,11 +51,11 @@ class AutorResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('nombres')
-                ->label(__('nombres')),
+                    ->label(__('nombres')),
                 TextColumn::make('apellidos')
-                ->label(__('apellidos')),
+                    ->label(__('apellidos')),
                 TextColumn::make('fecha_nacimiento')
-                ->label(__('fecha_nacimiento')),
+                    ->label(__('fecha_nacimiento')),
             ])
             ->filters([
                 //
