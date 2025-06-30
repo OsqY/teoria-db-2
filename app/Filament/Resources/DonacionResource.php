@@ -4,11 +4,15 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\DonacionResource\Pages;
 use App\Filament\Resources\DonacionResource\RelationManagers;
+use App\Filament\Resources\DonacionResource\RelationManagers\DetalleDonacionesRelationManager;
 use App\Models\Donacion;
 use Filament\Forms;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -19,6 +23,16 @@ class DonacionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function getModelLabel(): string
+    {
+        return __('Donacion');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Donaciones');
+    }
+
     public static function getNavigationGroup(): ?string
     {
         return __('Transacciones');
@@ -28,7 +42,20 @@ class DonacionResource extends Resource
     {
         return $form
             ->schema([
-                //
+                RichEditor::make('motivo')
+                    ->label(__('motivo'))
+                    ->columnSpanFull()
+                    ->required(),
+                Select::make('proveedor_id')
+                    ->label(__('Proveedor'))
+                    ->relationship('proveedor', 'nombre')
+                    ->searchable()
+                    ->preload(),
+                Select::make('usuario_donante_id')
+                    ->label(__('usuario_donante'))
+                    ->relationship('usuario', 'name')
+                    ->searchable()
+                    ->preload()
             ]);
     }
 
@@ -36,7 +63,13 @@ class DonacionResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('motivo')
+                    ->label(__('motivo'))
+                    ->html(),
+                TextColumn::make('proveedor.nombre')
+                    ->label(__('Proveedor')),
+                TextColumn::make('usuario.name')
+                    ->label(__('User'))
             ])
             ->filters([
                 //
@@ -54,7 +87,7 @@ class DonacionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            DetalleDonacionesRelationManager::class
         ];
     }
 

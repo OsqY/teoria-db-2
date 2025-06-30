@@ -4,8 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\CompraResource\Pages;
 use App\Filament\Resources\CompraResource\RelationManagers;
+use App\Filament\Resources\CompraResource\RelationManagers\DetalleComprasRelationManager;
 use App\Models\Compra;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -19,6 +21,17 @@ class CompraResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function getModelLabel(): string
+    {
+        return __('Compra');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Compras');
+    }
+
+
     public static function getNavigationGroup(): ?string
     {
         return __('Transacciones');
@@ -29,14 +42,19 @@ class CompraResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('cantidad_total')
-                    ->required()
+                    ->label(__('cantidad_total'))
+                    ->default(0)
+                    ->disabled()
                     ->numeric(),
                 Forms\Components\TextInput::make('valor_de_compra')
-                    ->required()
+                    ->label(__('valor_de_compra'))
+                    ->default(0)
+                    ->disabled()
                     ->numeric(),
-                Forms\Components\TextInput::make('proveedor_id')
+                Select::make('proveedor_id')
+                    ->label(__('Proveedor'))
+                    ->relationship('proveedor', 'nombre')
                     ->required()
-                    ->numeric(),
             ]);
     }
 
@@ -45,22 +63,11 @@ class CompraResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('cantidad_total')
-                    ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('valor_de_compra')
-                    ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('proveedor_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('proveedor.nombre')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -78,7 +85,7 @@ class CompraResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            DetalleComprasRelationManager::class
         ];
     }
 

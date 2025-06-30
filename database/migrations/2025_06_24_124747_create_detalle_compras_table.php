@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('detalle_compras', function (Blueprint $table) {
             $table->id();
             $table->integer('cantidad');
+            $table->double('precio_unidad');
+            $table->double('sub_total');
             $table->foreignIdFor(Libro::class)->constrained();
             $table->foreignIdFor(Compra::class)->constrained();
             $table->timestamps();

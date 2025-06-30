@@ -14,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('compras', function (Blueprint $table) {
             $table->id();
-            $table->integer('cantidad_total');
-            $table->double('valor_de_compra');
+            $table->integer('cantidad_total')->default(0);
+            $table->double('valor_de_compra')->default(0);;
             $table->foreignIdFor(Proveedor::class)->constrained()->on('proveedores');
             $table->timestamps();
         });

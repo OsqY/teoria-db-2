@@ -27,6 +27,16 @@ class DevolucionResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-inbox-stack';
 
+    public static function getModelLabel(): string
+    {
+        return __('Devolucion');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Devoluciones');
+    }
+
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
@@ -41,12 +51,16 @@ class DevolucionResource extends Resource
     {
         return $form
             ->schema([
-                DatePicker::make('fecha'),
+                DatePicker::make('fecha')
+                    ->label(__('fecha')),
                 TextInput::make('cantidad_total')
+                    ->label(__('cantidad_total'))
                     ->numeric(),
                 RichEditor::make('motivo')
+                    ->label(__('motivo'))
                     ->columnSpanFull(),
                 Select::make('usuario_id')
+                    ->label(__('User'))
                     ->relationship('usuario', 'name')
                     ->preload()
                     ->searchable()
@@ -58,13 +72,17 @@ class DevolucionResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('fecha')
+                    ->label(__('fecha'))
                     ->sortable(),
                 TextColumn::make('cantidad_total')
+                    ->label(__('cantidad_total'))
                     ->sortable()
                     ->badge(),
                 TextColumn::make('motivo')
+                    ->label(__('motivo'))
                     ->html(),
                 TextColumn::make('usuario.name')
+                    ->label(__('User'))
 
 
             ])

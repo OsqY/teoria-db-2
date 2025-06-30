@@ -15,6 +15,11 @@ class DetalleVenta extends Model
             $venta->recalcularTotales();
         });
 
+        static::updated(function (self $detalleVenta) {
+            $venta = $detalleVenta->venta;
+            $venta->recalcularTotales();
+        });
+
         static::deleted(function (self $detalleVenta) {
             $venta = $detalleVenta->venta;
             $venta->recalcularTotales();

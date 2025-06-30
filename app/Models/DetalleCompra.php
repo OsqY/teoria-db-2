@@ -9,18 +9,26 @@ class DetalleCompra extends Model
 {
     protected static function booted()
     {
+
+        static::saving(function (self $detalleCompra) {
+            $detalleCompra->sub_total = $detalleCompra->precio_unidad * $detalleCompra->cantidad;
+        });
+
         static::created(function (self $detalleCompra) {
             $detalleCompra->libro->increment('cantidad_disponible', $detalleCompra->cantidad);
+            $detalleCompra->compra->recalcularValor();
         });
 
         static::updating(function (self $detalleCompra) {
             $originalCantidad = $detalleCompra->getOriginal('cantidad');
             $diferencia = $detalleCompra->cantidad - $originalCantidad;
             $detalleCompra->libro->increment('cantidad_disponible', $diferencia);
+            $detalleCompra->compra->recalcularValor();
         });
 
         static::deleted(function (self $detalleCompra) {
             $detalleCompra->libro->decrement('cantidad_disponible', $detalleCompra->cantidad);
+            $detalleCompra->compra->recalcularValor();
         });
     }
 

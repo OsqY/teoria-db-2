@@ -24,30 +24,47 @@ class VentaResource extends Resource
         return __('Transacciones');
     }
 
+    public static function getModelLabel(): string
+    {
+        return __('Venta');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Ventas');
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
                 Forms\Components\TextInput::make('numero')
-                    ->required()
+                    ->disabled()
                     ->numeric(),
-                Forms\Components\DatePicker::make('fecha')
-                    ->required(),
                 Forms\Components\TextInput::make('isv')
-                    ->required()
+                    ->disabled()
+                    ->label(__('isv'))
                     ->numeric(),
                 Forms\Components\TextInput::make('sub_total')
-                    ->required()
-                    ->numeric(),
-                Forms\Components\TextInput::make('descuentos')
-                    ->required()
+                    ->disabled()
+                    ->label(__('sub_total'))
                     ->numeric(),
                 Forms\Components\TextInput::make('total_neto')
-                    ->required()
+                    ->disabled()
+                    ->label(__('total_neto'))
                     ->numeric(),
-                Forms\Components\TextInput::make('usuario_comprante_id')
-                    ->required()
+                Forms\Components\DatePicker::make('fecha')
+                    ->label(__('fecha'))
+                    ->required(),
+                Forms\Components\TextInput::make('descuentos')
+                    ->label(__('descuentos'))
                     ->numeric(),
+                Forms\Components\Select::make('usuario_comprante_id')
+                    ->label(__('usuario_comprante'))
+                    ->relationship('usuarioComprante', 'name')
+                    ->preload()
+                    ->searchable(),
+
             ]);
     }
 

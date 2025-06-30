@@ -6,9 +6,12 @@ use App\Filament\Resources\ProveedorResource\Pages;
 use App\Filament\Resources\ProveedorResource\RelationManagers;
 use App\Models\Proveedor;
 use Filament\Forms;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -19,6 +22,16 @@ class ProveedorResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function getModelLabel(): string
+    {
+        return __('Proveedor');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('Proveedores');
+    }
+
     public static function getNavigationGroup(): ?string
     {
         return __('Libros');
@@ -28,7 +41,18 @@ class ProveedorResource extends Resource
     {
         return $form
             ->schema([
-                //
+                TextInput::make('nombre')
+                    ->label(__('nombre'))
+                    ->required(),
+                RichEditor::make('direccion')
+                    ->columnSpanFull()
+                    ->label(__('direccion'))
+                    ->required(),
+                TextInput::make('telefono')
+                    ->label(__('telefono'))
+                    ->tel()
+                    ->unique(ignoreRecord: true)
+                    ->required(),
             ]);
     }
 
@@ -36,7 +60,13 @@ class ProveedorResource extends Resource
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('nombre')
+                    ->label(__('nombre')),
+                TextColumn::make('direccion')
+                    ->html()
+                    ->label(__('nombre')),
+                TextColumn::make('telefono')
+                    ->label(__('telefono')),
             ])
             ->filters([
                 //

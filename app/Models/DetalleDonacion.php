@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DetalleDonacion extends Model
 {
+    protected $table = 'detalle_donaciones';
+
     protected static function booted()
     {
         static::created(function (self $detalle) {

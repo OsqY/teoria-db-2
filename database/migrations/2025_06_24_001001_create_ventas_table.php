@@ -16,10 +16,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('numero');
             $table->date('fecha');
-            $table->double('isv');
-            $table->double('sub_total');
-            $table->double('descuentos');
-            $table->double('total_neto');
+            $table->double('isv')
+                ->default(0);
+            $table->double('sub_total')->default(0);
+            $table->double('descuentos')->default(0);
+            $table->double('total_neto')->default(0);
             $table->foreignIdFor(User::class, 'usuario_comprante_id')->constrained();
             $table->timestamps();
         });
