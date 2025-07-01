@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Observers\UserObserver;
 use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
@@ -23,9 +25,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Model::unguard();
 
+        User::observe(UserObserver::class);
+
         LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
             $switch
-                ->locales(['en','es']); // also accepts a closure
+                ->locales(['en', 'es']); // also accepts a closure
         });
     }
 }

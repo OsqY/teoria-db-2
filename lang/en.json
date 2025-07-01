@@ -34,6 +34,8 @@
     "numero": "Number",
     "created_at": "Created At",
     "updated_at": "Updated At",
+    "Usuario": "User",
+    "Usuarios": "Users",
     "sitio_web": "Website",
     "direccion": "Address",
     "titulo": "Title",
