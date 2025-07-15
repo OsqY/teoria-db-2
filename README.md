@@ -18,6 +18,7 @@ Este proyecto consiste en un sistema de gestión de biblioteca, desarrollado con
 - [Maria Belén Salgado Sarmiento](https://github.com/MariaBelenSaSa)
 - [Oscar Ardón](https://github.com/OsqY)
 - [Andrea Karolina Santos](https://github.com/AndreaKarolinaSantos)
+- [Aylin Iselle Miranda Guevara](https://github.com/AylinGuevara).
 
 ## 📁 Estructura General
 
