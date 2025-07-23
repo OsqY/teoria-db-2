@@ -7,11 +7,13 @@ use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -42,13 +44,17 @@ class UserResource extends Resource
         return $form
             ->schema([
                 TextInput::make('name')
-                    ->label(__('name'))
-                    ->disabled(),
+                    ->label(__('name')),
                 Forms\Components\Select::make('roles')
                     ->relationship('roles', 'name')
                     ->multiple()
                     ->preload()
                     ->searchable(),
+                TextInput::make('email')->email()->required(),
+                Toggle::make('sancionado')
+                    ->label(__('sancionado'))
+                    ->onColor('success')
+                    ->offColor('danger')
             ]);
     }
 
@@ -57,6 +63,9 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name'),
+                ToggleColumn::make('sancionado')
+                    ->onColor('success')
+                    ->offColor('danger')
 
                 //
             ])

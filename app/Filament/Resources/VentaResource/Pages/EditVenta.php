@@ -5,6 +5,7 @@ namespace App\Filament\Resources\VentaResource\Pages;
 use App\Filament\Resources\VentaResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Livewire\Attributes\On;
 
 class EditVenta extends EditRecord
 {
@@ -15,5 +16,11 @@ class EditVenta extends EditRecord
         return [
             Actions\DeleteAction::make(),
         ];
+    }
+
+    #[On('recalcular-totales')]
+    public function refreshForm()
+    {
+        $this->refreshFormData(['isv', 'sub_total', 'total_neto']);
     }
 }

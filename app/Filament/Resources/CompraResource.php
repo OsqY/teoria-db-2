@@ -53,6 +53,8 @@ class CompraResource extends Resource
                     ->numeric(),
                 Select::make('proveedor_id')
                     ->label(__('Proveedor'))
+                    ->preload()
+                    ->searchable()
                     ->relationship('proveedor', 'nombre')
                     ->required()
             ]);
@@ -63,10 +65,13 @@ class CompraResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('cantidad_total')
+                    ->label(__('cantidad_total'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('valor_de_compra')
+                    ->label(__('valor_de_compra'))
                     ->sortable(),
                 Tables\Columns\TextColumn::make('proveedor.nombre')
+                    ->label(__('Proveedor'))
                     ->sortable(),
             ])
             ->filters([

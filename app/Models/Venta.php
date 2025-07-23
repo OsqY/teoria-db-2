@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 
 class Venta extends Model
 {
@@ -23,7 +24,7 @@ class Venta extends Model
     {
         $this->sub_total = $this->detalleVentas()->sum('valor_venta');
         $this->isv = $this->sub_total * 0.15;
-        $this->total_neto = $this->sub_total + $this->isv - $this->descuentos;
+        $this->total_neto = $this->sub_total + $this->isv - $this->descuentos + $this->valor_sancion;
         $this->save();
     }
 
@@ -31,6 +32,13 @@ class Venta extends Model
     {
         static::creating(function (self $venta) {
             $venta->numero = Venta::max('numero') + 1;
+        });
+
+        static::saved(function (self $venta) {
+            if (Auth::user()->sancionado) {
+                $venta->valor_sancion = $venta->total_neto * 0.10;
+                $venta->total_neto += $venta->valor_sancion;
+            }
         });
     }
 }

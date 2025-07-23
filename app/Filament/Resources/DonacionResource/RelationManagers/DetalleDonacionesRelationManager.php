@@ -10,11 +10,27 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DetalleDonacionesRelationManager extends RelationManager
 {
     protected static string $relationship = 'detalleDonaciones';
+
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('detalleDonacion');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('detalleDonaciones');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('detalleDonacion');
+    }
 
     public function form(Form $form): Form
     {
@@ -23,10 +39,12 @@ class DetalleDonacionesRelationManager extends RelationManager
 
                 Select::make('libro_id')
                     ->relationship('libro', 'titulo')
+                    ->label(__('libro'))
                     ->required()
                     ->searchable()
                     ->preload(),
                 TextInput::make('cantidad')
+                    ->label(__('cantidad'))
                     ->numeric()
                     ->minValue(1)
                     ->required()
@@ -38,8 +56,10 @@ class DetalleDonacionesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('libro.titulo')
             ->columns([
-                Tables\Columns\TextColumn::make('libro.titulo'),
-                Tables\Columns\TextColumn::make('cantidad'),
+                Tables\Columns\TextColumn::make('libro.titulo')
+                    ->label(__('libro')),
+                Tables\Columns\TextColumn::make('cantidad')
+                    ->label(__('cantidad'))
             ])
             ->filters([
                 //

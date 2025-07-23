@@ -2,25 +2,64 @@
 
 namespace App\Filament\Resources\VentaResource\RelationManagers;
 
+use App\Models\Libro;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use PhpParser\Node\Stmt\Label;
 
 class DetalleVentasRelationManager extends RelationManager
 {
     protected static string $relationship = 'detalleVentas';
 
+    public static function getTitle(Model $ownerRecord, string $pageClass): string
+    {
+        return __('detalleVenta');
+    }
+
+    public static function getPluralModelLabel(): string
+    {
+        return __('detalleVentas');
+    }
+
+    public static function getModelLabel(): string
+    {
+        return __('detalleVenta');
+    }
+
     public function form(Form $form): Form
     {
         return $form
             ->schema([
+                Select::make('libro_id')
+                    ->relationship('libro', 'titulo')
+                    ->preload()
+                    ->searchable()
+                    ->required()
+                    ->afterStateUpdated(function (Set $set, Get $get) {
+                        $libroId =  $get('libro_id');
+                        if (!$libroId) {
+                            return;
+                        }
+                        $libro = Libro::find($libroId);
+                        $precioBase = $libro->precio_base ?? 0;
+                        $set('valor_venta', $precioBase);
+                    }),
                 Forms\Components\TextInput::make('cantidad')
                     ->required()
-                    ->maxLength(255),
+                    ->minValue(1),
+                Forms\Components\TextInput::make('valor_venta')
+                    ->live()
+                    ->required()
             ]);
     }
 
@@ -29,21 +68,42 @@ class DetalleVentasRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('cantidad')
             ->columns([
-                Tables\Columns\TextColumn::make('cantidad'),
+                TextColumn::make('libro.titulo')
+                    ->label(__('libro')),
+                Tables\Columns\TextColumn::make('cantidad')
+                    ->label(__('cantidad')),
+                TextColumn::make('valor_venta')
+                    ->money('HNL')
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-                Tables\Actions\CreateAction::make(),
+                Tables\Actions\CreateAction::make()
+                    ->after(function () {
+                        $this->ownerRecord->recalcularTotales();
+                        $this->dispatch('recalcular-totales');
+                    }),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->after(function () {
+                        $this->ownerRecord->recalcularTotales();
+                        $this->dispatch('recalcular-totales');
+                    }),
+                Tables\Actions\DeleteAction::make()
+                    ->after(function () {
+                        $this->ownerRecord->recalcularTotales();
+                        $this->dispatch('recalcular-totales');
+                    }),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->after(function () {
+                            $this->ownerRecord->recalcularTotales();
+                            $this->dispatch('recalcular-totales');
+                        }),
                 ]),
             ]);
     }

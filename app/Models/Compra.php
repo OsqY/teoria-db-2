@@ -11,8 +11,8 @@ class Compra extends Model
 
     public function recalcularValor(): void
     {
-        $this->valor_de_compra = $this->detallCommpras->sum('sub_total');
-        $this->cantidad_total = $this->detallCompras->sum('cantidad');
+        $this->valor_de_compra = $this->detalleCompras->sum('sub_total');
+        $this->cantidad_total = $this->detalleCompras->sum('cantidad');
         $this->save();
     }
 
@@ -21,7 +21,6 @@ class Compra extends Model
         static::creating(function (self $compra) {
             $compra->cantidad_total = 0;
             $compra->valor_de_compra = 0;
-            $compra->save();
         });
     }
 

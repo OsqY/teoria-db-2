@@ -4,8 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\LibroResource\Pages;
 use App\Models\Libro;
+use Dom\Text;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -64,6 +66,14 @@ class LibroResource extends Resource
                 Forms\Components\DatePicker::make('anio_publicacion')
                     ->label(__('anio_publicacion'))
                     ->required(),
+                TextInput::make(
+                    'precio_base'
+                )
+                    ->label(__('precio_base'))
+                    ->numeric()
+                    ->minValue(0)
+                    ->default(0)
+                    ->required(),
                 Forms\Components\TextInput::make('cantidad_disponible')
                     ->label(__('cantidad_disponible'))
                     ->required()
@@ -88,6 +98,9 @@ class LibroResource extends Resource
                     ->label(__('anio_publicacion'))
                     ->date()
                     ->sortable(),
+                TextColumn::make('precio_base')
+                    ->label(__('precio_base'))
+                    ->money('HNL'),
                 Tables\Columns\TextColumn::make('cantidad_disponible')
                     ->label(__('cantidad_disponible'))
                     ->numeric()

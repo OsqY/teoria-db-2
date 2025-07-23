@@ -19,4 +19,10 @@ class Devolucion extends Model
     {
         return $this->hasMany(DetalleDevolucion::class);
     }
+
+    public function calcularTotales()
+    {
+        $this->cantidad_total = $this->detalleDevoluciones->sum();
+        $this->save();
+    }
 }

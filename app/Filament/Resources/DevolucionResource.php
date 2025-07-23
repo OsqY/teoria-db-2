@@ -55,6 +55,7 @@ class DevolucionResource extends Resource
                     ->label(__('fecha')),
                 TextInput::make('cantidad_total')
                     ->label(__('cantidad_total'))
+                    ->disabled()
                     ->numeric(),
                 RichEditor::make('motivo')
                     ->label(__('motivo'))

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\CompraResource\Pages;
 use App\Filament\Resources\CompraResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use Livewire\Attributes\On;
 
 class EditCompra extends EditRecord
 {
@@ -15,5 +16,11 @@ class EditCompra extends EditRecord
         return [
             Actions\DeleteAction::make(),
         ];
+    }
+
+    #[On('actualizar-totales')]
+    public function refreshFormTotals(): void
+    {
+        $this->refreshFormData(['cantidad_total', 'valor_de_compra']);
     }
 }
