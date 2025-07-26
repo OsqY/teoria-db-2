@@ -54,6 +54,10 @@ class VentaResource extends Resource
                     ->disabled()
                     ->label(__('sub_total'))
                     ->numeric(),
+                Forms\Components\TextInput::make('valor_sancion')
+                    ->disabled()
+                    ->label(__('valor_sancion'))
+                    ->numeric(),
                 Forms\Components\TextInput::make('total_neto')
                     ->disabled()
                     ->label(__('total_neto'))
@@ -107,6 +111,10 @@ class VentaResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('sub_total')
                     ->label(__('sub_total'))
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('valor_sancion')
+                    ->label(__('valor_sancion'))
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('descuentos')

@@ -52,10 +52,12 @@ class LibroResource extends Resource
                     ->relationship('autores', 'nombres')
                     ->multiple()
                     ->getOptionLabelFromRecordUsing(fn($record) => $record->nombres . ' ' . $record->apellidos)
+                    ->required()
                     ->searchable(),
                 Select::make('editorial_id')->required()
                     ->label(__('Editorial'))
                     ->relationship('editorial', 'nombre')
+                    ->required()
                     ->searchable(),
                 Select::make('categorias')
                     ->label(__('Categorias'))

@@ -45,6 +45,8 @@
     "cantidad_disponible": "Cantidad Disponible",
     "isbn": "ISBN",
     "fecha": "Fecha",
+    "valor_sancion": "Valor de Sanción",
+    "precio_base": "Precio Base",
     "fecha_prestamo": "Fecha de Préstamo",
     "fecha_nacimiento": "Fecha de Nacimiento",
     "fecha_devolucion_esperada": "Fecha de Devolución Esperada",

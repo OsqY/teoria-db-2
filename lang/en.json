@@ -55,6 +55,8 @@
     "estado": "Status",
     "fecha_devuelto": "Return Date",
     "nombres": "First Names",
+    "valor_sancion": "Penalty Value",
+    "precio_base": "Base Price",
     "apellidos": "Last Names",
     "detallePrestamo": "Loan Detail",
     "detallePrestamos": "Loan Details",

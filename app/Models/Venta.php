@@ -34,9 +34,9 @@ class Venta extends Model
             $venta->numero = Venta::max('numero') + 1;
         });
 
-        static::saved(function (self $venta) {
+        static::saving(function (self $venta) {
             if (Auth::user()->sancionado) {
-                $venta->valor_sancion = $venta->total_neto * 0.10;
+                $venta->valor_sancion = $venta->sub_total * 0.10;
                 $venta->total_neto += $venta->valor_sancion;
             }
         });

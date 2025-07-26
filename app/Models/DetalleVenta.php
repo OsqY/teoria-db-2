@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 class DetalleVenta extends Model
 {
@@ -14,6 +15,15 @@ class DetalleVenta extends Model
             $venta = $detalleVenta->venta;
             $detalleVenta->libro->decrement('cantidad_disponible', $detalleVenta->cantidad);
             $venta->recalcularTotales();
+        });
+
+        static::saving(function (self $detalleVenta) {
+
+            if (Auth::user()->sancionado) {
+                $venta = $detalleVenta->venta;
+                $venta->valor_sancion = $venta->sub_total * 0.10;
+                $venta->total_neto += $venta->valor_sancion;
+            }
         });
 
         static::updated(function (self $detalleVenta) {
