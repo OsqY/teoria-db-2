@@ -41,10 +41,12 @@ class DetalleVentasRelationManager extends RelationManager
         return $form
             ->schema([
                 Select::make('libro_id')
+                    ->label(__('Libro'))
                     ->relationship('libro', 'titulo')
                     ->preload()
                     ->searchable()
                     ->required()
+                    ->live()
                     ->afterStateUpdated(function (Set $set, Get $get) {
                         $libroId =  $get('libro_id');
                         if (!$libroId) {
@@ -52,12 +54,36 @@ class DetalleVentasRelationManager extends RelationManager
                         }
                         $libro = Libro::find($libroId);
                         $precioBase = $libro->precio_base ?? 0;
-                        $set('valor_venta', $precioBase);
+                        if ($precioBase > 0) {
+                            $set('valor_venta', $precioBase);
+                        }
                     }),
                 Forms\Components\TextInput::make('cantidad')
                     ->required()
-                    ->minValue(1),
+                    ->live()
+                    ->numeric()
+                    ->minValue(1)->maxValue(function (Get $get) {
+                        $libroId = $get('libro_id');
+                        if (!$libroId) {
+                            return 1;
+                        }
+                        return Libro::find($libroId)->cantidad_disponible ?? 1;
+                    })
+                    ->afterStateUpdated(function (Get $get, Set $set, $state) {
+                        $libroId = $get('libro_id');
+                        if (!$libroId) {
+                            return;
+                        }
+
+                        $maximo = Libro::find($libroId)->cantidad_disponible ?? 1;
+
+                        if ($state > $maximo) {
+                            $set('cantidad', $maximo);
+                        }
+                    }),
                 Forms\Components\TextInput::make('valor_venta')
+                    ->numeric()
+                    ->readOnly()
                     ->live()
                     ->required()
             ]);
@@ -69,7 +95,7 @@ class DetalleVentasRelationManager extends RelationManager
             ->recordTitleAttribute('cantidad')
             ->columns([
                 TextColumn::make('libro.titulo')
-                    ->label(__('libro')),
+                    ->label(__('Libro')),
                 Tables\Columns\TextColumn::make('cantidad')
                     ->label(__('cantidad')),
                 TextColumn::make('valor_venta')

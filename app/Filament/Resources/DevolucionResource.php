@@ -52,15 +52,19 @@ class DevolucionResource extends Resource
         return $form
             ->schema([
                 DatePicker::make('fecha')
+                    ->required()
                     ->label(__('fecha')),
                 TextInput::make('cantidad_total')
+                    ->required()
                     ->label(__('cantidad_total'))
                     ->disabled()
                     ->numeric(),
                 RichEditor::make('motivo')
+                    ->required()
                     ->label(__('motivo'))
                     ->columnSpanFull(),
                 Select::make('usuario_id')
+                    ->required()
                     ->label(__('User'))
                     ->relationship('usuario', 'name')
                     ->preload()

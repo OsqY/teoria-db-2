@@ -41,6 +41,7 @@ class PrestamoResource extends Resource
                 Select::make('user_id')
                     ->label(__('User'))
                     ->preload()
+                    ->required()
                     ->relationship('user', 'name')
                     ->searchable(),
                 Forms\Components\DatePicker::make('fecha_prestamo')

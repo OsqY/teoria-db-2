@@ -19,11 +19,13 @@ class DetallePrestamosRelationManager extends RelationManager
         return __('detallePrestamo');
     }
 
-    public static function getPluralModelLabel(): string {
+    public static function getPluralModelLabel(): string
+    {
         return __('detallePrestamos');
     }
 
-    public static function getModelLabel(): string {
+    public static function getModelLabel(): string
+    {
         return __('detallePrestamo');
     }
 
@@ -33,7 +35,8 @@ class DetallePrestamosRelationManager extends RelationManager
             ->schema([
                 Select::make('libro_id')
                     ->label(__('Libro'))
-                    ->relationship('libro','titulo')
+                    ->preload()
+                    ->relationship('libro', 'titulo')
                     ->searchable(),
             ]);
     }
@@ -59,9 +62,7 @@ class DetallePrestamosRelationManager extends RelationManager
                             $libro->cantidad_disponible -= 1;
 
                             $libro->save();
-
                         }
-
                     }),
 
             ])
@@ -83,9 +84,7 @@ class DetallePrestamosRelationManager extends RelationManager
                                 $nuevoLibro->cantidad_disponible -= 1;
                                 $nuevoLibro->save();
                             }
-
                         }
-
                     }),
                 Tables\Actions\DeleteAction::make()
                     ->before(function (Model $record) {
@@ -95,7 +94,6 @@ class DetallePrestamosRelationManager extends RelationManager
                             $libro->cantidad_disponible += 1;
                             $libro->save();
                         }
-
                     }),
 
             ])

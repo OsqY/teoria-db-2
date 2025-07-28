@@ -2,41 +2,53 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+
+use function PHPUnit\Framework\throwException;
 
 class DetalleVenta extends Model
 {
     protected static function booted()
     {
+        static::creating(function (self $detalleVenta) {
+            $libro = $detalleVenta->libro;
 
-        static::saved(function (self $detalleVenta) {
-            $venta = $detalleVenta->venta;
-            $detalleVenta->libro->decrement('cantidad_disponible', $detalleVenta->cantidad);
-            $venta->recalcularTotales();
+            if ($libro->cantidad_disponible < $detalleVenta->cantidad) {
+                throw ValidationException::withMessages([
+                    'cantidad' => 'La cantidad seleccionada no está disponible en inventario (' . $libro->cantidad_disponible . ' disponibles).',
+                ]);
+            }
+
+            $libro->decrement('cantidad_disponible', $detalleVenta->cantidad);
         });
 
-        static::saving(function (self $detalleVenta) {
+        static::updating(function (self $detalleVenta) {
+            $cantidadOriginal = $detalleVenta->getOriginal('cantidad');
+            $diferencia = $detalleVenta->cantidad - $cantidadOriginal;
+            $libro = $detalleVenta->libro;
 
-            if (Auth::user()->sancionado) {
-                $venta = $detalleVenta->venta;
-                $venta->valor_sancion = $venta->sub_total * 0.10;
-                $venta->total_neto += $venta->valor_sancion;
+            if ($diferencia > 0 && $libro->cantidad_disponible < $diferencia) {
+                throw ValidationException::withMessages([
+                    'cantidad' => 'No se puede aumentar la cantidad, no hay suficiente inventario disponible.',
+                ]);
+            }
+
+            if ($diferencia != 0) {
+                $libro->decrement('cantidad_disponible', $diferencia);
             }
         });
 
-        static::updated(function (self $detalleVenta) {
-            $venta = $detalleVenta->venta;
-            $valor =  $detalleVenta->cantidad - $detalleVenta->getOriginal('cantidad');
-            $detalleVenta->libro->decrement('cantidad_disponible', $valor);
-            $venta->recalcularTotales();
+        static::saved(function (self $detalleVenta) {
+            $detalleVenta->venta->recalcularTotales();
         });
 
         static::deleted(function (self $detalleVenta) {
-            $venta = $detalleVenta->venta;
             $detalleVenta->libro->increment('cantidad_disponible', $detalleVenta->cantidad);
-            $venta->recalcularTotales();
+            $detalleVenta->venta->recalcularTotales();
         });
     }
 

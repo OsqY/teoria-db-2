@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
+use SplFixedArray;
 
 class Venta extends Model
 {
@@ -22,10 +23,15 @@ class Venta extends Model
 
     public function recalcularTotales(): void
     {
-        $this->sub_total = $this->detalleVentas()->sum('valor_venta');
+        $subtotalCalculado = $this->detalleVentas()->get()->sum(function ($detalle) {
+            return $detalle->valor_venta * $detalle->cantidad;
+        });
+
+        $this->sub_total = $subtotalCalculado;
         $this->isv = $this->sub_total * 0.15;
-        $this->total_neto = $this->sub_total + $this->isv - $this->descuentos + $this->valor_sancion;
-        $this->save();
+        $this->total_neto = $this->sub_total + $this->isv + $this->valor_sancion - $this->descuentos;
+
+        $this->saveQuietly();
     }
 
     protected static function booted()

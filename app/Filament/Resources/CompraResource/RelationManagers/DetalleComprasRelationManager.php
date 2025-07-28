@@ -40,31 +40,36 @@ class DetalleComprasRelationManager extends RelationManager
             ->schema([
                 Select::make('libro_id')
                     ->relationship('libro', 'titulo')
-                    ->label(__('libro'))
+                    ->label(__('Libro'))
                     ->preload()
                     ->searchable()
                     ->required(),
                 TextInput::make('cantidad')
                     ->numeric()
+                    ->minValue(0)
+                    ->default(0)
                     ->label(__('cantidad'))
-                    ->live(debounce: 300)
+                    ->live()
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         $precio = $get('precio_unidad') ?? 0;
                         $cantidad = $get('cantidad') ?? 0;
-                        $set('sub_total',  (float)$cantidad * (float)$precio);
+                        if ($cantidad > 0 && $precio > 0) {
+                            $set('sub_total',  (float)$cantidad * (float)$precio);
+                        }
                     })
-                    ->minValue(0)
                     ->required(),
                 TextInput::make('precio_unidad')
                     ->minValue(0)
                     ->numeric()
                     ->required()
                     ->label(__('precio_unidad'))
-                    ->live(debounce: 500)
+                    ->live()
                     ->afterStateUpdated(function (Get $get, Set $set) {
                         $precio = $get('precio_unidad') ?? 0;
                         $cantidad = $get('cantidad') ?? 0;
-                        $set('sub_total',  (float)$cantidad * (float)$precio);
+                        if ($cantidad > 0 && $precio > 0) {
+                            $set('sub_total',  (float)$cantidad * (float)$precio);
+                        }
                     }),
                 TextInput::make('sub_total')
                     ->numeric()

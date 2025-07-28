@@ -69,6 +69,7 @@ class CompraResource extends Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('valor_de_compra')
                     ->label(__('valor_de_compra'))
+                    ->money('HNL')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('proveedor.nombre')
                     ->label(__('Proveedor'))

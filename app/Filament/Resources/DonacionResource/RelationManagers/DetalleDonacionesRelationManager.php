@@ -39,7 +39,7 @@ class DetalleDonacionesRelationManager extends RelationManager
 
                 Select::make('libro_id')
                     ->relationship('libro', 'titulo')
-                    ->label(__('libro'))
+                    ->label(__('Libro'))
                     ->required()
                     ->searchable()
                     ->preload(),

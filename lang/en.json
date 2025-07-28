@@ -57,6 +57,8 @@
     "nombres": "First Names",
     "valor_sancion": "Penalty Value",
     "precio_base": "Base Price",
+    "cantidad": "Quantity",
+    "precio_unidad": "Price per Unit",
     "apellidos": "Last Names",
     "detallePrestamo": "Loan Detail",
     "detallePrestamos": "Loan Details",
