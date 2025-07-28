@@ -22,7 +22,7 @@ class Devolucion extends Model
 
     public function calcularTotales()
     {
-        $this->cantidad_total = $this->detalleDevoluciones()->sum();
+        $this->cantidad_total = $this->detalleDevoluciones()->count();
         $this->save();
     }
 }
