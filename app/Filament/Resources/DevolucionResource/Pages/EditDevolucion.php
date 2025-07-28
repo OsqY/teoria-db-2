@@ -21,6 +21,6 @@ class EditDevolucion extends EditRecord
     #[On('calcular-totales')]
     public function refreshFormTotals()
     {
-        $this->refreshFormData();
+        $this->refreshFormData(['cantidad_total']);
     }
 }
