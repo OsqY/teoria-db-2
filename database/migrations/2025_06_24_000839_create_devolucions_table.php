@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('devoluciones', function (Blueprint $table) {
             $table->id();
             $table->date('fecha');
-            $table->integer('cantidad_total');
+            $table->integer('cantidad_total')->default(0);
             $table->text('motivo');
             $table->foreignIdFor(User::class, 'usuario_id')->constrained();
             $table->timestamps();
