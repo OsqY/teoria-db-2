@@ -88,7 +88,7 @@ class VentaResource extends Resource
                         }
                         return null;
                     })
-                    ->disabled(fn() => !Auth::user()->hasRole('super_admin'))
+                    ->readOnly(fn() => !Auth::user()->hasRole('super_admin'))
                     ->required(),
             ]);
     }
