@@ -57,7 +57,7 @@ class DetalleDonacionesRelationManager extends RelationManager
             ->recordTitleAttribute('libro.titulo')
             ->columns([
                 Tables\Columns\TextColumn::make('libro.titulo')
-                    ->label(__('libro')),
+                    ->label(__('Libro')),
                 Tables\Columns\TextColumn::make('cantidad')
                     ->label(__('cantidad'))
             ])

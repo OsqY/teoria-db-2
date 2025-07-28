@@ -46,10 +46,11 @@ class LibroResource extends Resource
                 Forms\Components\TextInput::make('isbn')
                     ->label(__('isbn'))
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(13),
                 Select::make('autores')
                     ->label(__('Autores'))
                     ->relationship('autores', 'nombres')
+                    ->preload()
                     ->multiple()
                     ->getOptionLabelFromRecordUsing(fn($record) => $record->nombres . ' ' . $record->apellidos)
                     ->required()
@@ -57,12 +58,14 @@ class LibroResource extends Resource
                 Select::make('editorial_id')->required()
                     ->label(__('Editorial'))
                     ->relationship('editorial', 'nombre')
+                    ->preload()
                     ->required()
                     ->searchable(),
                 Select::make('categorias')
                     ->label(__('Categorias'))
                     ->multiple()
                     ->relationship('categorias', 'nombre')
+                    ->preload()
                     ->required()
                     ->searchable(),
                 Forms\Components\DatePicker::make('anio_publicacion')

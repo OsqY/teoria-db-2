@@ -55,7 +55,6 @@ class DevolucionResource extends Resource
                     ->required()
                     ->label(__('fecha')),
                 TextInput::make('cantidad_total')
-                    ->required()
                     ->label(__('cantidad_total'))
                     ->disabled()
                     ->numeric(),
