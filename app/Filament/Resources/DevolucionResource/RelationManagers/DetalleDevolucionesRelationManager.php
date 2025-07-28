@@ -36,7 +36,7 @@ class DetalleDevolucionesRelationManager extends RelationManager
         return $form
             ->schema([
                 Select::make('libro_id')
-                    ->label(__('libro'))
+                    ->label(__('Libro'))
                     ->relationship('libro', 'titulo')
                     ->preload()
                     ->searchable()
@@ -49,7 +49,8 @@ class DetalleDevolucionesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('libro.titulo')
             ->columns([
-                Tables\Columns\TextColumn::make('libro.titulo'),
+                Tables\Columns\TextColumn::make('libro.titulo')
+                    ->label(__('Libro')),
             ])
             ->filters([
                 //
