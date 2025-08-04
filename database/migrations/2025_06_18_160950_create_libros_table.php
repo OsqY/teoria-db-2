@@ -15,10 +15,10 @@ return new class extends Migration
         Schema::create('libros', function (Blueprint $table) {
             $table->id();
             $table->string('titulo');
-            $table->string('isbn');
+            $table->string('isbn', 13);
             $table->foreignIdFor(Editorial::class)->constrained('editoriales');
             $table->date('anio_publicacion');
-            $table->integer('cantidad_disponible');
+            $table->integer('cantidad_disponible')->default(0);
             $table->timestamps();
         });
     }

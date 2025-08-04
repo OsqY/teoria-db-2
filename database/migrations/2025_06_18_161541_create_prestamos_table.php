@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->constrained();
             $table->date('fecha_prestamo');
             $table->date('fecha_devolucion_esperada');
-            $table->string('estado');
+            $table->enum('estado', ['prestado', 'devuelto', 'pendiente'])->default('prestado');
             $table->date('fecha_devuelto')->nullable()->index();
             $table->timestamps();
         });

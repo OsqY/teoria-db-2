@@ -53,10 +53,10 @@ class CategoriaResource extends Resource
                     ->label(__('nombre'))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('descripcion')
+                    ->html()
                     ->searchable()
                     ->sortable()
                     ->label(__('descripcion'))
-                    ->html()
 
             ])
             ->filters([

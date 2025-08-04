@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->text('direccion');
-            $table->string('telefono');
+            $table->string('telefono')->unique();
             $table->timestamps();
         });
     }

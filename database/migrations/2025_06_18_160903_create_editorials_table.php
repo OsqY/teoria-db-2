@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nombre');
             $table->text('direccion');
-            $table->string('telefono')->nullable();
-            $table->string('sitio_web')->nullable();
+            $table->string('telefono')->nullable()->unique();
+            $table->string('sitio_web')->nullable()->unique();
             $table->timestamps();
         });
     }
